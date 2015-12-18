@@ -18,11 +18,11 @@
   "dependencies": {
     "paper-styles": "PolymerElements/paper-styles#~1.1.1"
   },
-  "_release": "2b92469e34",
+  "_release": "10a9d11581",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "2b92469e3421112e8f9385f236ddd85389f38755"
+    "commit": "10a9d115810593f69d3581ce21fcc7efa842794e"
   },
   "_source": "git://github.com/David-Mulder/paper-theme.git",
   "_target": "master",
