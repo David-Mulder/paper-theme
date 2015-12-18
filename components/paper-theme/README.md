@@ -1,6 +1,6 @@
 paper-theme
 ===
-This is a fully functional proposal for a new basis for `paper-styles`
+This is a fully functional proposal for a new basis for `paper-styles`. Scroll down for a demo and read on for the theory and the proposal.
 
 The MD side
 ---
@@ -46,4 +46,4 @@ Notes
 ---
 
  1. The contrast calculation used is the http://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html spec, however this does not seem to match the MD spec and thus the
-    luminance break off point has been manually determined.
+    luminance break off point has been manually aligned with the MD spec.
