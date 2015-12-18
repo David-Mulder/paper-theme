@@ -1,6 +1,6 @@
 paper-theme
 ===
-This is a fully functional proposal for a new basis for `paper-styles`
+This is a fully functional proposal for a new basis for `paper-styles`. Scroll down for a demo and read on for the theory and the proposal.
 
 The MD side
 ---
