@@ -4,10 +4,16 @@
     "David Mulder <david.mulder@ymail.com>"
   ],
   "description": "",
-  "main": "",
+  "main": "paper-theme.html",
   "moduleType": [],
   "license": "MIT",
-  "homepage": "",
+  "homepage": "https://github.com/David-Mulder/paper-theme",
+  "keywords": [
+    "web-component",
+    "polymer",
+    "theming",
+    "styling"
+  ],
   "ignore": [
     "**/.*",
     "node_modules",

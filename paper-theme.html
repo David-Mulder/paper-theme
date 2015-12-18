@@ -51,6 +51,9 @@
 				accentShade: {
 					type: String,
 					value: 'A200'
+				},
+				customPalettes: {
+					type: Array
 				}
 			},
 
@@ -87,7 +90,13 @@
 					};
 
 				}else{
-					var palette = paperThemePalette.filter((palette) => palette.name.toLowerCase() === name.toLowerCase())[0];
+					var palette;
+					if(typeof this.customPalettes !== 'undefined'){
+						palette = this.customPalettes.filter((palette) => palette.name.toLowerCase() === name.toLowerCase())[0];
+					}
+					if(typeof palette == 'undefined'){
+						palette = paperThemePalettes.filter((palette) => palette.name.toLowerCase() === name.toLowerCase())[0];
+					}
 					if(typeof palette == 'undefined'){
 						console.warn('The given palette name is not valid');
 						return;
