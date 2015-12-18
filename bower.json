@@ -9,5 +9,8 @@
     "paper-color-picker": "David-Mulder/paper-color-picker#~0.9.1",
     "paper-datatable": "David-Mulder/paper-datatable#~0.9.3",
     "paper-theme": "David-Mulder/paper-theme#master"
+  },
+  "resolutions": {
+    "paper-styles": "^1.0.0"
   }
 }
