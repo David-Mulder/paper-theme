@@ -29,7 +29,7 @@ We're talking about approxamatily 150 css variables and even more if new augment
 
     <paper-theme primary-palette="Indigo" accent-palette="Pink"></paper-theme>
     
-Now, sometimes the official MD colors might not be good enough for you, so it's also possible to set custom hex colors which will automatically generate a palette for you (still need to add support for fully custom palettes):
+Now, sometimes the official MD colors might not be good enough for you, so it's also possible to set custom hex colors which will automatically generate a palette for you (or you can set custom palettes through the `custom-palettes` option):
 
     <paper-theme primary-palette="#673AB7" accent-palette="#073AB7"></paper-theme>
 
