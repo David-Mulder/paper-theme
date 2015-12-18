@@ -1,0 +1,21 @@
+{
+  "name": "paper-theme",
+  "authors": [
+    "David Mulder <david.mulder@ymail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "paper-styles": "PolymerElements/paper-styles#~1.1.1"
+  }
+}

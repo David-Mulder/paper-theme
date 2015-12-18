@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+	<head>
+		<link rel="import" href="../paper-theme.html">
+		<link rel="import" href="../standard-styles.html">
+		<link rel="import" href="../../paper-toolbar/paper-toolbar.html">
+		<link rel="import" href="../../paper-header-panel/paper-header-panel.html">
+		<link rel="import" href="../../paper-input/paper-input.html">
+		<link rel="import" href="../../paper-card/paper-card.html">
+		<link rel="import" href="../../paper-checkbox/paper-checkbox.html">
+		<link rel="import" href="../../paper-toggle-button/paper-toggle-button.html">
+		<link rel="import" href="../../paper-button/paper-button.html">
+		<link rel="import" href="../../paper-menu/paper-menu.html">
+		<link rel="import" href="../../paper-item/paper-item.html">
+		<link rel="import" href="../../paper-dropdown-menu/paper-dropdown-menu.html">
+		<link rel="import" href="../../paper-color-picker/paper-color-input.html">
+	</head>
+	<body>
+		<template id="app" is="dom-bind">
+
+			<paper-theme primary-palette="{{primaryColor}}" accent-palette="{{accentColor}}" theme="{{theme}}"></paper-theme>
+
+			<!-- demo styles -->
+			<style is="custom-style">
+				paper-header-panel {
+					position: absolute;
+					left: 0px;
+					top: 0px;
+					right: 0px;
+					bottom: 0px;
+				}
+				paper-header-panel div[main]{
+					padding: 0px 20px;
+				}
+				paper-toolbar {
+					@apply(--paper-font-title);
+					background-color: var(--primary-color);
+					color: var(--text-on-primary-color);
+				}
+				paper-card {
+					display: block;
+					width: 100%;
+					max-width: 700px;
+					margin: 20px auto;
+					--paper-card-header-text: {
+						@apply(--paper-font-title);
+					};
+				}
+				paper-card div.card-content{
+					padding: 0px 20px 20px 20px;
+				}
+			</style>
+
+			<paper-header-panel>
+				<paper-toolbar>
+					<div title>Hello World!</div>
+				</paper-toolbar>
+				<div main>
+					<paper-card heading="Themer">
+						<div class="card-content">
+							<p>
+								Some text explaining the ins and outs of this element. With a <a href="http://www.google.com">
+								link to who knows where.</a>
+							</p>
+							<paper-dropdown-menu label="Theme">
+								<paper-menu class="dropdown-content" attr-for-selected="data-value" selected="{{theme}}">
+									<paper-item data-value="dark">Dark</paper-item>
+									<paper-item data-value="light">Light</paper-item>
+								</paper-menu>
+							</paper-dropdown-menu>
+
+							<paper-color-input label="Primary Color" value-as-hex="{{primaryColor}}"></paper-color-input>
+							<paper-color-input label="Accent Color" value-as-hex="{{accentColor}}"></paper-color-input>
+						</div>
+					</paper-card>
+					<paper-card heading="Some card">
+						<div class="card-content">
+							<paper-input label="Boring cars">
+								<div suffix>cars</div>
+							</paper-input>
+							<paper-input value="20" label="Sport cars">
+								<div suffix>cars</div>
+							</paper-input>
+							<div style="margin: 20px 0px;">
+								<paper-checkbox>Some text</paper-checkbox>
+							</div>
+							<div style="margin: 20px 0px;">
+								<paper-checkbox checked>Some text</paper-checkbox>
+							</div>
+							<div style="margin: 20px 0px;">
+								<paper-toggle-button>Test</paper-toggle-button>
+							</div>
+							<div style="margin: 20px 0px;">
+								<paper-toggle-button checked>Test</paper-toggle-button>
+							</div>
+						</div>
+						<div class="card-actions">
+							<paper-button>Some action</paper-button>
+							<paper-button>Some action</paper-button>
+						</div>
+					</paper-card>
+				</div>
+			</paper-header-panel>
+
+		</template>
+
+		<script>
+			var app = document.getElementById('app');
+			app.theme = 'dark';
+			app.primaryColor = '#c35b73';
+			app.accentColor = '#faf110';
+		</script>
+
+	</body>
+</html>

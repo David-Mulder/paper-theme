@@ -1,0 +1,13 @@
+{
+  "name": "paper-theme documentation",
+  "dependencies": {
+    "paper-elements": "PolymerElements/paper-elements#~1.0.7",
+    "iron-elements": "PolymerElements/iron-elements#~1.0.7",
+    "neon-elements": "PolymerElements/neon-elements#~1.0.0",
+    "gold-elements": "PolymerElements/gold-elements#~1.0.1",
+    "google-web-components": "GoogleWebComponents/google-web-components#~1.0.1",
+    "paper-color-picker": "David-Mulder/paper-color-picker#~0.9.1",
+    "paper-datatable": "David-Mulder/paper-datatable#~0.9.3",
+    "paper-theme": "David-Mulder/paper-theme#master"
+  }
+}

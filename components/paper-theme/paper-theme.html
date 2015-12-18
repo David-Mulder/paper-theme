@@ -1,0 +1,281 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-styles/paper-styles.html">
+<link rel="import" href="./palette.html">
+
+<!--
+
+@demo demo/index.html
+@hero hero.svg
+-->
+
+<dom-module id="paper-theme">
+	<template>
+
+		<style>
+		:root{
+
+		}
+		</style>
+
+	</template>
+
+	<script>
+		Polymer({
+			is: 'paper-theme',
+
+			properties: {
+				primaryPalette: {
+					type: String,
+					value: 'Indigo'
+				},
+				accentPalette: {
+					type: String,
+					value: 'Pink'
+				},
+				theme: {
+					type: String,
+					value: 'light'
+				},
+				primaryLightShade: {
+					type: String,
+					value: '100'
+				},
+				primaryShade: {
+					type: String,
+					value: '500'
+				},
+				primaryDarkShade: {
+					type: String,
+					value: '700'
+				},
+				accentShade: {
+					type: String,
+					value: 'A200'
+				}
+			},
+
+			observers: [
+				'setTheme(primaryPalette, accentPalette, theme, primaryLightShade, primaryShade, primaryDarkShade, accentShade)'
+			],
+
+			_getPalette: function(name){
+				if(name.substr(0,1) === '#'){
+					var rgb = this._hexToRgb(name);
+					var hsl = this._rgb2hsl(rgb.r, rgb.g, rgb.b);
+					var minMax = function(val, max) {
+						max = max || 1;
+						return Math.min(max, Math.max(0, val));
+					};
+
+					var createColor = this._hsl2rgb.bind(this, hsl[0], hsl[1]);
+
+					return {
+						'50': createColor(minMax(hsl[2] + .52)),
+						'100': createColor(minMax(hsl[2] + .37)),
+						'200': createColor(minMax(hsl[2] + .26)),
+						'300': createColor(minMax(hsl[2] + .12)),
+						'400': createColor(minMax(hsl[2] + .06)),
+						'500': createColor(hsl[2]),
+						'600': createColor(minMax(hsl[2] - .06)),
+						'700': createColor(minMax(hsl[2] - .12)),
+						'800': createColor(minMax(hsl[2] - .18)),
+						'900': createColor(minMax(hsl[2] - .24)),
+						'A100': this._hsl2rgb(hsl[0]+3/360, hsl[1], minMax(hsl[2] + .24)),
+						'A200': this._hsl2rgb(hsl[0]+3/360, hsl[1], minMax(hsl[2] + .16)),
+						'A400': this._hsl2rgb(hsl[0]+3/360, hsl[1], minMax(hsl[2] - .01)),
+						'A700': this._hsl2rgb(hsl[0]+3/360, hsl[1], minMax(hsl[2] - .12))
+					};
+				}else{
+					//todo convert to rgb objects
+					return paperThemePalette
+						.filter((palette) => palette.name.toLowerCase() === name.toLowerCase())[0].palette;
+				}
+
+			},
+
+			_setColor: function(cssVariable, rgbObject){
+
+				var toCSS = function(rgbObject, alpha){
+					if(alpha){
+						return 'rgba('+Math.round(rgbObject.r)+','+Math.round(rgbObject.g)+','+Math.round(rgbObject.b)+','+alpha+')';
+					}else{
+						return 'rgb('+Math.round(rgbObject.r)+','+Math.round(rgbObject.g)+','+Math.round(rgbObject.b)+')';
+					}
+				};
+				var blackOrWhiteText = function(rgbObject){
+					var rgb = {};
+					['r', 'g', 'b'].forEach(function(c){
+						rgb[c] = rgbObject[c] / 255;
+						if(rgb[c] <= 0.03928){
+							rgb[c] /= 12.92;
+						}else{
+							rgb[c] = Math.pow(((rgb[c]+0.055)/1.055),2.4)
+						}
+					});
+					var l = 0.2126 * rgb.r + 0.7152 * rgb.g + 0.0722 * rgb.b;
+					if(l > 0.179){
+						return {r:0,g:0,b:0};
+					}else{
+						return {r:255,g:255,b:255};
+					}
+				};
+				Polymer.StyleDefaults.customStyle['--'+cssVariable] = toCSS(rgbObject);
+				var baseColor = blackOrWhiteText(rgbObject);
+				if(baseColor.r === 0){
+					Polymer.StyleDefaults.customStyle['--text-on-'+cssVariable] = toCSS(baseColor,.87);
+					Polymer.StyleDefaults.customStyle['--secondary-text-on-'+cssVariable] = toCSS(baseColor, .54);
+					Polymer.StyleDefaults.customStyle['--disabled-on-'+cssVariable] = toCSS(baseColor, .38);
+					Polymer.StyleDefaults.customStyle['--divider-on-'+cssVariable] = toCSS(baseColor, .12);
+				}else{
+					Polymer.StyleDefaults.customStyle['--text-on-'+cssVariable] = toCSS(baseColor,1);
+					Polymer.StyleDefaults.customStyle['--secondary-text-on-'+cssVariable] = toCSS(baseColor, .7);
+					Polymer.StyleDefaults.customStyle['--disabled-on-'+cssVariable] = toCSS(baseColor, .3);
+					Polymer.StyleDefaults.customStyle['--divider-on-'+cssVariable] = toCSS(baseColor, .12);
+				}
+				Polymer.StyleDefaults.customStyle['--text-50-on-'+cssVariable] = toCSS(baseColor, .50); //for toggle buttons
+				Polymer.StyleDefaults.customStyle['--text-30-on-'+cssVariable] = toCSS(baseColor, .30);
+			},
+			setTheme: function(primaryPaletteName, accentPaletteName, theme, primaryLightShade, primaryShade, primaryDarkShade, accentShade){
+
+				var primaryPalette = this._getPalette(primaryPaletteName);
+				var accentPalette = this._getPalette(accentPaletteName);
+
+				this._setColor('primary-color', primaryPalette[primaryShade]);
+				this._setColor('primary-color-light', primaryPalette[primaryLightShade]);
+				this._setColor('primary-color-dark', primaryPalette[primaryDarkShade]);
+				this._setColor('accent-color', accentPalette[primaryShade]);
+
+				Object.keys(primaryPalette).forEach((shade) => {
+					this._setColor('primary-color-'+shade, primaryPalette[shade]);
+				});
+
+				Object.keys(accentPalette).forEach((shade) => {
+					this._setColor('accent-color-'+shade, accentPalette[shade]);
+				});
+
+				/*if(baseColorName.toLowerCase() === 'black'){
+					Polymer.StyleDefaults.customStyle['--text-color'] = 'rgba(0,0,0, .87)';
+					Polymer.StyleDefaults.customStyle['--secondary-text-color'] = 'rgba(0,0,0, .54)';
+					Polymer.StyleDefaults.customStyle['--disabled-color'] = 'rgba(0,0,0, .38)';
+					Polymer.StyleDefaults.customStyle['--divider-color'] = 'rgba(0,0,0, .12)';
+
+					Polymer.StyleDefaults.customStyle['--text-color-on-inverse'] = 'rgba(255,255,255, 1)';
+					Polymer.StyleDefaults.customStyle['--secondary-text-color-on-inverse'] = 'rgba(255,255,255, .70)';
+					Polymer.StyleDefaults.customStyle['--disabled-color-on-inverse'] = 'rgba(255,255,255, .30)';
+					Polymer.StyleDefaults.customStyle['--divider-color-on-inverse'] = 'rgba(255,255,255, .12)';
+				}else{
+					Polymer.StyleDefaults.customStyle['--text-color'] = 'rgba(255,255,255, 1)';
+					Polymer.StyleDefaults.customStyle['--secondary-text-color'] = 'rgba(255,255,255, .70)';
+					Polymer.StyleDefaults.customStyle['--disabled-color'] = 'rgba(255,255,255, .30)';
+					Polymer.StyleDefaults.customStyle['--divider-color'] = 'rgba(255,255,255, .12)'
+
+					Polymer.StyleDefaults.customStyle['--text-color-on-inverse'] = 'rgba(0,0,0, .87)';
+					Polymer.StyleDefaults.customStyle['--secondary-text-color-on-inverse'] = 'rgba(0,0,0, .54)';
+					Polymer.StyleDefaults.customStyle['--disabled-color-on-inverse'] = 'rgba(0,0,0, .38)';
+					Polymer.StyleDefaults.customStyle['--divider-color-on-inverse'] = 'rgba(0,0,0, .12)';
+				}
+
+				this._setDeprecatedTheme(primaryPalette, accentPalette, baseColorName);
+				*/
+
+				if(theme.toLowerCase() === 'light'){
+					this._setColor('status-bar-color', {r: 224, g: 224, b: 224});
+					this._setColor('app-bar-color', {r: 245, g: 245, b: 245});
+					this._setColor('background-color', {r: 250, g: 250, b: 250});
+					this._setColor('card-dialog-color', {r: 255, g: 255, b: 255});
+				}else{
+					this._setColor('status-bar-color', {r: 0, g: 0, b: 0});
+					this._setColor('app-bar-color', {r: 33, g: 33, b: 33});
+					this._setColor('background-color', {r: 48, g: 48, b: 48});
+					this._setColor('card-dialog-color', {r: 66, g: 66, b: 66});
+				}
+
+				this._setDeprecatedTheme();
+
+				this.apply();
+			},
+
+			_setDeprecatedTheme: function(){
+				Polymer.StyleDefaults.customStyle['--primary-background-color'] = Polymer.StyleDefaults.customStyle['--background-color'];
+				Polymer.StyleDefaults.customStyle['--primary-text-color'] = Polymer.StyleDefaults.customStyle['--text-on-background-color'];
+				Polymer.StyleDefaults.customStyle['--text-primary-color'] = Polymer.StyleDefaults.customStyle['--text-on-primary-color'];
+				Polymer.StyleDefaults.customStyle['--disabled-text-color'] = Polymer.StyleDefaults.customStyle['--disabled-on-background-color'];
+				//Polymer.StyleDefaults.customStyle['--divider-color'] = ;
+				/*Polymer.StyleDefaults.customStyle['--primary-text-color'] = Polymer.StyleDefaults.customStyle['--text-color'];
+				Polymer.StyleDefaults.customStyle['--text-primary-color'] = Polymer.StyleDefaults.customStyle['--text-color-on-inverse'];
+				Polymer.StyleDefaults.customStyle['--primary-background-color'] = baseColorName.toLowerCase() === 'black' ? '#fff' : '#000';
+				Polymer.StyleDefaults.customStyle['--disabled-text-color'] = Polymer.StyleDefaults.customStyle['--disabled-color'];
+				Polymer.StyleDefaults.customStyle['--default-primary-color'] = Polymer.StyleDefaults.customStyle['--primary-color'];
+
+				Polymer.StyleDefaults.customStyle['--dark-primary-color'] = Polymer.StyleDefaults.customStyle['--primary-color-dark'];
+				Polymer.StyleDefaults.customStyle['--light-primary-color'] = Polymer.StyleDefaults.customStyle['--primary-color-light'];*/
+			},
+
+			apply: function(){
+				Polymer.updateStyles();
+			},
+
+			_hexToRgb: function(hex){
+				var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+				var hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+					return r + r + g + g + b + b;
+				});
+
+				var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+				return result ? {
+					r: parseInt(result[1], 16),
+					g: parseInt(result[2], 16),
+					b: parseInt(result[3], 16)
+				} : null;
+			},
+
+			_rgb2hsl: function(r, g, b){
+				r /= 255, g /= 255, b /= 255;
+				var max = Math.max(r, g, b), min = Math.min(r, g, b);
+				var h, s, l = (max + min) / 2;
+				if(max == min){
+					h = s = 0;
+				}else{
+					var d = max - min;
+					s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+					switch(max){
+						case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+						case g: h = (b - r) / d + 2; break;
+						case b: h = (r - g) / d + 4; break;
+					}
+					h /= 6;
+				}
+				return [h, s, l];
+			},
+			_hsl2rgb: function(h, s, l) {
+				var r, g, b;
+
+				//h = bound01(h, 360);
+				//s = bound01(s, 100);
+				//l = bound01(l, 100);
+
+				function hue2rgb(p, q, t) {
+					if(t < 0) t += 1;
+					if(t > 1) t -= 1;
+					if(t < 1/6) return p + (q - p) * 6 * t;
+					if(t < 1/2) return q;
+					if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+					return p;
+				}
+
+				if(s === 0) {
+					r = g = b = l; // achromatic
+				}
+				else {
+					var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+					var p = 2 * l - q;
+					r = hue2rgb(p, q, h + 1/3);
+					g = hue2rgb(p, q, h);
+					b = hue2rgb(p, q, h - 1/3);
+				}
+
+				return { r: r * 255, g: g * 255, b: b * 255 };
+			}
+		});
+	</script>
+</dom-module>

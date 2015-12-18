@@ -1,0 +1,31 @@
+{
+  "name": "paper-theme",
+  "authors": [
+    "David Mulder <david.mulder@ymail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "https://github.com/David-Mulder/paper-theme",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "paper-styles": "PolymerElements/paper-styles#~1.1.1"
+  },
+  "_release": "c95b0cac3c",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "c95b0cac3cc06453f895373651e253ba7aa7bf25"
+  },
+  "_source": "git://github.com/David-Mulder/paper-theme.git",
+  "_target": "master",
+  "_originalSource": "David-Mulder/paper-theme",
+  "_direct": true
+}

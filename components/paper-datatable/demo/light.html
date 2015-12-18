@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+	<head>
+
+		<title></title>
+
+		<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+		<script>
+			window.Polymer = window.Polymer || {};
+			window.Polymer.dom = 'shadow';
+		</script>
+		<link rel="import" href="../../polymer/polymer.html">
+		<link rel="import" href="../../paper-card/paper-card.html">
+		<link rel="import" href="../paper-datatable-styles.html">
+
+		<link rel="import" href="./demo-menu.html">
+
+		<style is="custom-style">
+
+			:root{
+			}
+			body{
+				overflow:hidden;
+			}
+
+			paper-card{
+				display:block;
+				max-width: 800px;
+				margin: auto;
+				padding: 20px;
+			}
+
+			table{
+				max-width: 800px;
+				margin: auto;
+				margin-bottom: 20px;
+			}
+		</style>
+
+	</head>
+	<body>
+
+			<style is="custom-style" include="paper-datatable-styles"></style>
+
+			<demo-menu>
+				<table class="card">
+					<thead>
+						<tr>
+							<th>Column 1</th>
+							<th>Column 2</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Cell 1</td>
+							<td>Cell 2</td>
+						</tr>
+						<tr>
+							<td>Cell 1</td>
+							<td>Cell 2</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<paper-card>
+					The above is a simple <code>&lt;table&gt;</code> element after including
+					<code>paper-datable-styles</code> using:
+
+					<pre style="margin-left:20px;"><code>&lt;style is="custom-style" include="paper-datatable-styles"&gt;&lt;/style&gt;</code></pre>
+
+					with <code>class="card"</code> added for a simple MD card design.
+				</paper-card>
+			</demo-menu>
+
+
+	</body>
+</html>
