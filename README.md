@@ -13,7 +13,7 @@ The current `paper-styles` is a poor reflection of the color section of the Mate
 | `primary-color-*`, `accent-color-*` | [Color palette](http://www.google.be/design/spec/style/color.html#color-color-palette) | The full color palettes should be available |
 | `status-bar-color`, `app-bar-color`, `background-color`, `card-dialog-color` | [Themes](http://www.google.be/design/spec/style/color.html#color-themes) | These are shades of white or black (depending on the theme) used for backgrounds.
 
-Next it needs to be possible to show text and components on top of these colors. The material design spec defines the colors and opacity of those components, but the base color (black or white) is dependent on the contrast. In other words we need to define this base color for each variable. As there is no way to do this dynamically (e.g. this would be a lot simpler with CSS preprocessors) we end up defining the following set of variables for *each* of the above variables.
+Next it needs to be possible to show text and components on top of these colors. The material design spec defines the colors and opacity of those components, but the base color (black or white) is dependent on the contrast<sup>1</sup>. In other words we need to define this base color for each variable. As there is no way to do this dynamically (e.g. this would be a lot simpler with CSS preprocessors) we end up defining the following set of variables for *each* of the above variables.
 
 | Augment | MD spec | Description |
 | ------- | ------- | ----------- |
@@ -35,7 +35,15 @@ Now, sometimes the official MD colors might not be good enough for you, so it's 
 And lastly (as far as important features go) you can set the theme
 
     <paper-theme primary-palette="Indigo" accent-palette="Pink" theme="Dark"></paper-theme>
-    
+
+Additionally there is a `standard-styles.html` import that will set the styles of a number of elements to use the new variables, although this is mostly for demonstration purposes right now and not finished. 
+
 Want to see it in action?
-===
-Well, check [this demo](http://david-mulder.github.io/paper-theme/components/paper-theme/demo/dark.html) here
+---
+Well, check [this demo](http://david-mulder.github.io/paper-theme/components/paper-theme/demo/dark.html) here and explore the generated palettes [here](http://david-mulder.github.io/paper-theme/components/paper-theme/demo/custom-theme.html)
+
+Notes
+---
+
+ 1. The contrast calculation used is the http://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html spec, however this does not seem to match the MD spec and thus the
+    luminance break off point has been manually determined.
