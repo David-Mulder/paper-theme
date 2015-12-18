@@ -37,7 +37,7 @@ And lastly (as far as important features go) you can set the theme
 
     <paper-theme primary-palette="Indigo" accent-palette="Pink" theme="Dark"></paper-theme>
 
-Additionally there is a `standard-styles.html` import that will set the styles of a number of elements to use the new variables, although this is mostly for demonstration purposes right now and not finished. 
+Additionally there is a `standard-styles.html` import that will set the styles of a number of elements to use the new variables.
 
 Want to see it in action?
 ---
