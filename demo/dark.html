@@ -3,6 +3,8 @@
 	<head>
 		<title>&lt;paper-theme&gt; demo</title>
 
+		<link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABZ0RVh0Q3JlYXRpb24gVGltZQAxMi8xNi8xNTSSRXUAAAAcdEVYdFNvZnR3YXJlAEFkb2JlIEZpcmV3b3JrcyBDUzbovLKMAAAELElEQVR4nO2aP0hbQRzHv/3jECMOFY2Dw5OaglZsQDCDgdJODlkKgRS6pLZjgqVdDK2ltIjpUlqSteIqdGzByS4WmoIYJdrBSDJkaCpxeBgdKrRD+8o1vHfvd3ePHuL7rLk/v/se39/97l7OXb/14SfOMOd1B6AbXwDdAejGF0B3ALrxBdAdgG58AXQHoBtfAN0B6MYXQHcAuvEF8HKwrmAHEnEDQ4PdXg7ryNTNAbx9FUN/X0B6jIsexoP09DCmbgwAAFpHJ6hUTWyUmyhtH6BUbno2z9TNAdxNhhHq/b3w+dlx3Hu4JjXWOa8eRBJxA+npEW6bvZqJjfIBSttNVKomvn0/FpqjfeEsS8u7WFreFRoP8EiAyGgPXj+PCvXJFbawslonteUtnOX+ozVUqqZQHMoW6O8LYH52XKjPysc6afHUhVtYVjhs/SDHoiRAV7AD87PjCHbSh9mrmSgsfuW2EV24Rag3gFQyjMLiDrmPkgDp6WFcNugZv3V0goX8FneH3r6KCY3ZTiJuoLTdxFqxQWovfQwm4sbfjE8lv7jj6tGF/BZaRyeyYQEAsplr6Ap2kNpKCRAZ7XHN+O1QfV+pmpiZ+6wkQrDzIrKZMVJbYQFkkh7F9yxeiDA5EUIibri2ExJAJulRfG9HpWpiIb8p1Kedu7evuFalQgJkM2PCCYrieyfWig3kCltSfQGaFcgCpJJhTE6EhAKg+p47xmpdSYTLRjdSybDj7yQBYtEQdxA7RH3PQ1WEVDKMyGiP7W+uAgwNdiObuSY0oazveays1vHpC+1styObGbM9GrkCdAU7kM2MCSU9QM33TgwNdjvuIoVQb8D22swVQCbpAfD06gvIbwRLwWFTHAWQSXoWonWCG6IldzufvjTw7n3N9jdbAWSSHotb5hVBpuRmaewfYyHvnEBtBaDW0TxSybDy05hMyd3O49w6NxnbCqB67Fg4ZV4KVtWpgpPvWRxzgBciqFjhzYuoUtLj+Z6Fewp4IUIibggfX+npEaWk5+Z7FtdCyAsRRKwQGe0h3eJ4uPmehVQKq4oQ6g2Q7+elchN7NfkiiuJ7FvJlSFWEyYkQYlFaXTEzV5QSgep7FqHrsIoIezUTpfIBqe1h6wdm5opCDyIivmcRfhGSEWHlY134ufq3CPRXIRHfs0i9CYqIUFjcQU5iZwD605io71mkX4XdRGgdneDJy3VhT7ZTqZrIc975ZXzPovRdwHrtmU3/m+Eb+8d4nFv37ErMm0fG9ywXjOE7z1QGqFRNfNs/RuzPzXFz+wAzc0XhD5+UeQD8U1Q9eKo+jyefx60dily9JO13CkvLu+jvC2DqxoCS71k8+zz+P0nEDeXcYnEq/yLj1eKBUyqAl/gC6A5AN74AugPQjS+A7gB04wugOwDd+ALoDkA3vgC6A9DNmRfgF8jJ2qhMtuHEAAAAAElFTkSuQmCC">
+
 		<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 		<link rel="import" href="../paper-theme.html">
 		<link rel="import" href="../standard-styles.html">
@@ -66,7 +68,7 @@
 				}
 				paper-fab{
 					position:absolute;
-					right: 20px;
+					right: 30px;
 					bottom: 30px;
 					z-index: 2;
 				}
@@ -85,7 +87,7 @@
 								link to who knows where.</a>
 							</p>
 							<paper-dropdown-menu label="Theme">
-								<paper-menu class="dropdown-content" attr-for-selected="data-value" selected="{{theme}}">
+								<paper-menu id="themeMenu" class="dropdown-content" attr-for-selected="data-value" selected="{{theme}}">
 									<paper-item data-value="dark">Dark</paper-item>
 									<paper-item data-value="light">Light</paper-item>
 								</paper-menu>
@@ -129,9 +131,6 @@
 								<paper-spinner active></paper-spinner>
 							</div>
 							<div style="margin: 20px 0px;">
-								<paper-toast opened text="Hello World!"></paper-toast>
-							</div>
-							<div style="margin: 20px 0px;">
 								<div style="display:inline-block">
 									<span>Some text with a tooltip</span>
 									<paper-tooltip>Tooltip text</paper-tooltip>
@@ -162,6 +161,8 @@
 
 			<paper-fab icon="create"></paper-fab>
 
+			<paper-toast id="toast" opened text="Hello World!"></paper-toast>
+
 		</template>
 
 		<script>
@@ -169,6 +170,12 @@
 			app.theme = 'dark';
 			app.primaryColor = '#c35b73';
 			app.accentColor = '#faf110';
+
+			setTimeout(function(){
+				app.$.themeMenu.addEventListener('iron-select', function(){
+					app.$.toast.set('opened', true);
+				});
+			},0);
 		</script>
 
 	</body>
