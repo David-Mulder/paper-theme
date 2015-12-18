@@ -72,7 +72,7 @@ There are three different main configurations all 3 elements allow: `circle`, `s
 				<span>{{colorName}}</span>&nbsp;<!--
 				--><template is="dom-if" if="{{withDescription}}"><!--
 					--><span class="light">rgb<template is="dom-if" if="{{allowAlpha}}">a</template>(</span><span class="dark">{{value.red}}</span><span class="light">, </span><span class="dark">{{value.green}}</span><span class="light">, </span><span class="dark">{{value.blue}}</span><template is="dom-if" if="{{allowAlpha}}"><span class="light">, </span><span class="dark">{{value.alpha}}</span></template><span class="light">)</span>
-				</template>
+			</template>
 			</div>
 			<div id="colorPreview" suffix>
 				<div id="color" style$="{{_computeBackgroundColor(value.*)}}"></div>
@@ -98,6 +98,11 @@ There are three different main configurations all 3 elements allow: `circle`, `s
 				value: {
 					type: Object,
 					notify: true
+				},
+				valueAsHex: {
+					type: String,
+					notify: true,
+					observer: '_setValueFromHex'
 				},
 				/**
 				 * The label for this input.
@@ -160,6 +165,9 @@ There are three different main configurations all 3 elements allow: `circle`, `s
 			behaviors: [
 				/* Polymer.IronFormElementBehavior */ // disabled till https://github.com/Polymer/polymer/issues/3167 gets fixed
 			],
+			observers: [
+				'_setValueAsHexFromValue(value.*)'
+			],
 			listeners: {
 				'input.tap': 'openColorPicker'
 			},
@@ -189,6 +197,35 @@ There are three different main configurations all 3 elements allow: `circle`, `s
 			},
 			_isValueDefined: function(){
 				return this.value.red >= 0 && this.value.green >= 0 && this.value.blue >= 0;
+			},
+			_setValueAsHexFromValue: function(){
+				if(this._isValueDefined()){
+					var hex = '#';
+					var value = this.value;
+					['red', 'green', 'blue'].forEach(function(c){
+						var h = value[c].toString(16);
+						l = h.length;
+						hex += l < 2 ? '0' : '';
+						hex += l < 1 ? '0' : '';
+						hex += h;
+					});
+					this.set('valueAsHex', hex);
+				}
+			},
+			_setValueFromHex: function(){
+				var hex = this.valueAsHex;
+				var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+				var hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+					return r + r + g + g + b + b;
+				});
+
+				var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+				if(typeof this.value === 'undefined'){
+					this.set('value', {});
+				}
+				this.set('value.red', parseInt(result[1], 16));
+				this.set('value.green', parseInt(result[2], 16));
+				this.set('value.blue', parseInt(result[3], 16));
 			}
 		});
 	</script>
