@@ -58,23 +58,23 @@ Check the README file.
 					return false;
 				}
 
-				var primaryPalette = this._getPalette(primaryPaletteName);
-				var accentPalette = this._getPalette(accentPaletteName);
-				if(typeof primaryPalette == 'undefined' || typeof accentPalette == 'undefined'){
+				this.primaryPaletteColors = this._getPalette(primaryPaletteName);
+				this.accentPaletteColors = this._getPalette(accentPaletteName);
+				if(typeof this.primaryPaletteColors == 'undefined' || typeof this.accentPaletteColors == 'undefined'){
 					return false;
 				}
 
-				this._setColor('primary-color', primaryPalette[primaryShade]);
-				this._setColor('primary-color-light', primaryPalette[primaryLightShade]);
-				this._setColor('primary-color-dark', primaryPalette[primaryDarkShade]);
-				this._setColor('accent-color', accentPalette[accentShade]);
+				this._setColor('primary-color', this.primaryPaletteColors[primaryShade]);
+				this._setColor('primary-color-light', this.primaryPaletteColors[primaryLightShade]);
+				this._setColor('primary-color-dark', this.primaryPaletteColors[primaryDarkShade]);
+				this._setColor('accent-color', this.accentPaletteColors[accentShade]);
 
-				Object.keys(primaryPalette).forEach((shade) => {
-					this._setColor('primary-color-'+shade, primaryPalette[shade]);
+				Object.keys(this.primaryPaletteColors).forEach((shade) => {
+					this._setColor('primary-color-'+shade, this.primaryPaletteColors[shade]);
 				});
 
-				Object.keys(accentPalette).forEach((shade) => {
-					this._setColor('accent-color-'+shade, accentPalette[shade]);
+				Object.keys(this.accentPaletteColors).forEach((shade) => {
+					this._setColor('accent-color-'+shade, this.accentPaletteColors[shade]);
 				});
 
 				if(theme.toLowerCase() === 'light'){
@@ -203,12 +203,16 @@ Check the README file.
 					Polymer.StyleDefaults.customStyle['--disabled-on-'+cssVariable] = toCSS(baseColor, .38);
 					Polymer.StyleDefaults.customStyle['--divider-on-'+cssVariable] = toCSS(baseColor, .12);
 					Polymer.StyleDefaults.customStyle['--text-30-on-'+cssVariable] = toCSS(baseColor, .30);
+					Polymer.StyleDefaults.customStyle['--text-7-on-'+cssVariable] = toCSS(baseColor, .07);
+					Polymer.StyleDefaults.customStyle['--text-4-on-'+cssVariable] = toCSS(baseColor, .04);
 				}else{
 					Polymer.StyleDefaults.customStyle['--text-on-'+cssVariable] = toCSS(baseColor,1);
 					Polymer.StyleDefaults.customStyle['--secondary-text-on-'+cssVariable] = toCSS(baseColor, .7);
 					Polymer.StyleDefaults.customStyle['--disabled-on-'+cssVariable] = toCSS(baseColor, .3);
 					Polymer.StyleDefaults.customStyle['--divider-on-'+cssVariable] = toCSS(baseColor, .12);
 					Polymer.StyleDefaults.customStyle['--text-30-on-'+cssVariable] = toCSS(baseColor, .26);
+					Polymer.StyleDefaults.customStyle['--text-7-on-'+cssVariable] = toCSS(baseColor, .06);
+					Polymer.StyleDefaults.customStyle['--text-4-on-'+cssVariable] = toCSS(baseColor, .035);
 				}
 
 			},
