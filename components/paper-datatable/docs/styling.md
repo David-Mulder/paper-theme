@@ -12,6 +12,21 @@ Which would make the header `green` and the content in each cell in the column `
 
 Tip: Check the `theming.html` demo for a live demonstration.
 
+Styling content inside `<template>`'s
+---
+Sometimes you need to style content inside of a cell when using `<template>`'s. There are 3 ways to achieve this:
+
+ - Inline styling. 
+   - Advantage: It's pretty clear what you're doing. 
+   - Disadvantages: *If* you need the same style in multiple columns you end up with duplicated styles and you can't 
+     style Polymer specific styles.
+ - `paper-datatable-class-n` are a set of classes with matching mixins to style specific classes inside cells. 
+   - Advantage: You can apply the same style to multiple different elements in different columns.
+   - Disadvantages: It's hard to read and it only works in Shadow DOM
+ - [Cross scope styling](https://www.polymer-project.org/1.0/docs/devguide/styling.html#xscope-styling). Stuff like `/deep/`
+   - Advantage: It works really well.
+   - Disadvantage: It's deprecated.
+
 <paper-datatable>
 ===
 
@@ -20,6 +35,7 @@ Tip: Check the `theming.html` demo for a live demonstration.
  `--paper-datatable-divider-color` | divider color between rows | `--divider-color`
  `--paper-datatable-row-selection-color` | divider color between rows | `--paper-grey-100`
  `--paper-datatable-row-hover-color` | color of hovered row | `--paper-grey-200`
+ `--paper-datatable-checkbox-color` | checkbox color | `--primary-text-color`
  `--paper-datatable-header-checkbox-color` | checkbox color | `--primary-text-color`
 
 Mixins
@@ -46,7 +62,8 @@ Variables
  Custom property | Description | Default
  ----------------|-------------|----------
  `--paper-datatable-divider-color` | divider color is used to draw the bottom line | --divider-color
- `--paper-datatable-selection-toolbar-color` | color of selected toolbar, should be 50 of the secondary color | --paper-pink-50
+ `--paper-datatable-selection-toolbar-color` | color of selected toolbar, should be 50 of the secondary color | `--paper-pink-50`
+ `--paper-datatable-selection-toolbar-text-color` | text color of text and icons on selection toolbar | `--accent-color`
  `--paper-datatable-navigation-bar-text-color` | color of text in navigation bar | 
 
 Mixins
@@ -56,3 +73,4 @@ Mixins
  ------|-------------
  `--paper-datatable-card` | applied to the main card
  `--paper-datatable-navigation-bar` | applied to the bottom bar containing the navigation
+ `--paper-datatable-selection-toolbar` | applied to the selection toolbar

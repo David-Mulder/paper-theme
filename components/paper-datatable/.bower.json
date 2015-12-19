@@ -1,6 +1,6 @@
 {
   "name": "paper-datatable",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "authors": [
     "David Mulder <david.mulder@ymail.com>"
   ],
@@ -41,14 +41,13 @@
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#~1.1.0",
     "paper-input": "PolymerElements/paper-input#~1.0.18"
   },
-  "_release": "0.9.3",
+  "_release": "0.9.4",
   "_resolution": {
     "type": "version",
-    "tag": "0.9.3",
-    "commit": "0304db407b304c1efe3152a5721e8ebcedf7496a"
+    "tag": "0.9.4",
+    "commit": "4c1021b322fc66613987e26f221bc2a59fb7c63b"
   },
   "_source": "git://github.com/David-Mulder/paper-datatable.git",
   "_target": "~0.9.3",
-  "_originalSource": "David-Mulder/paper-datatable",
-  "_direct": true
+  "_originalSource": "David-Mulder/paper-datatable"
 }

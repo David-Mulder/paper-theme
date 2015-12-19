@@ -26,6 +26,7 @@
 		<link rel="import" href="../../paper-toast/paper-toast.html">
 		<link rel="import" href="../../paper-tooltip/paper-tooltip.html">
 		<link rel="import" href="../../paper-tabs/paper-tabs.html">
+		<link rel="import" href="../../paper-datatable/paper-datatable-card.html">
 
 		<link rel="import" href="../../paper-color-picker/paper-color-input.html">
 	</head>
@@ -72,6 +73,10 @@
 					bottom: 30px;
 					z-index: 2;
 				}
+				paper-datatable-card{
+					max-width: 990px;
+					margin: 20px auto;
+				}
 
 			</style>
 
@@ -94,7 +99,7 @@
 							</paper-dropdown-menu>
 
 							<paper-color-input label="Primary Color" value-as-hex="{{primaryColor}}" shape="huebox"></paper-color-input>
-							<paper-color-input label="Accent Color" value-as-hex="{{accentColor}}" shape="huebox"></paper-color-input>
+							<paper-color-input id="accentColorPicker" label="Accent Color" value-as-hex="{{accentColor}}" shape="huebox"></paper-color-input>
 						</div>
 					</paper-card>
 					<paper-card>
@@ -156,12 +161,34 @@
 							<paper-button>Some action</paper-button>
 						</div>
 					</paper-card>
+					<paper-datatable-card header="Dangerously delicious">
+						<div toolbar-main>
+							<paper-icon-button icon="more-vert" on-tap="delete"></paper-icon-button>
+						</div>
+						<div toolbar-select>
+							<paper-icon-button icon="delete" on-tap="delete"></paper-icon-button>
+						</div>
+						<paper-datatable data="{{data}}" selectable multi-selection custom-row-style="{{generateRowCss}}" progress="{{progressBarVisble}}" sort-property="calories" sort-direction="asc">
+							<paper-datatable-column header="Dessert (100g serving)" property="title" type="String" style="width:99%;" sortable editable dialog edit-icon>
+								<template>
+									<paper-input value="{{value}}" no-label-float maxlength="40" char-counter></paper-input>
+								</template>
+							</paper-datatable-column>
+							<paper-datatable-column header="Calories" property="calories" type="Number" align="right" sortable tooltip="The total amount of food energy in the given serving size."></paper-datatable-column>
+							<paper-datatable-column header="Fat (g)" property="fat" type="Number" align="right" format-value="[[toFixedOne]]" sortable tooltip="The total amount of fat in the given serving size."></paper-datatable-column>
+							<paper-datatable-column header="Carbs (g)" property="carbs" type="Number" align="right" sortable tooltip="The total amount of carbs in the given serving size."></paper-datatable-column>
+							<paper-datatable-column header="Protein (g)" property="protein" type="Number" align="right" format-value="[[toFixedOne]]" sortable tooltip="The total amount of protein in the given serving size."></paper-datatable-column>
+							<paper-datatable-column header="Sodium (mg)" property="sodium" type="Number" align="right" sortable tooltip="The amount of sodium as a percentage of the recommended daily amount."></paper-datatable-column>
+							<paper-datatable-column header="Calcium (%)" property="calcium" type="Number" align="right" format-value="[[toPercentage]]" sortable tooltip="The amount of calcium as a percentage of the recommended daily amount."></paper-datatable-column>
+						</paper-datatable>
+					</paper-datatable-card>
 				</div>
 			</paper-header-panel>
 
 			<paper-fab icon="create"></paper-fab>
 
 			<paper-toast id="toast" opened text="Hello World!"></paper-toast>
+			<paper-toast id="warning" duration="5000" class="fit-bottom"></paper-toast>
 
 		</template>
 
@@ -169,11 +196,45 @@
 			var app = document.getElementById('app');
 			app.theme = 'dark';
 			app.primaryColor = '#c35b73';
-			app.accentColor = '#faf110';
+			app.accentColor = '#817c16';
 
+			//data table
+			app.data = [
+				{id: 0, title: 'Frozen yogurt', calories: 159, fat: 6, carbs: 24, protein: 4, sodium: 87, calcium:.14, iron: .01},
+				{id: 1, title: 'Ice cream sandwich', calories: 237, fat: 9, carbs: 37, protein: 4.3, sodium: 129, calcium:.08, iron: .01},
+				{id: 2, title: 'Eclair', calories: 262, fat: 16, carbs: 24, protein: 6, sodium: 337, calcium:.06, iron: .07},
+				{id: 3, title: 'Cupcake', calories: 305, fat: 3.7, carbs: 67, protein: 4.3, sodium: 413, calcium:.03, iron: .08},
+				{id: 4, title: 'Gingerbread', calories: 356, fat: 16, carbs: 49, protein: 3.9, sodium: 327, calcium:.07, iron: .16},
+				{id: 5, title: 'Jelly bean', calories: 373, fat: 0, carbs: 94, protein: 0, sodium: 50, calcium:0, iron: 0},
+				{id: 6, title: 'Lollipop', calories: 392, fat: 0.2, carbs: 98, protein: 0, sodium: 38, calcium:0, iron: .02},
+				{id: 7, title: 'Honeycomb', calories: 408, fat: 3.2, carbs: 87, protein: 6.5, sodium: 562, calcium:0, iron: .45}
+			];
+			app.toFixedOne = function(value){
+				return value.toFixed(1);
+			};
+			app.toPercentage = function(value){
+				return Math.round(value * 10000)/100 + '%';
+			};
+
+			//toasts and warnings
 			setTimeout(function(){
 				app.$.themeMenu.addEventListener('iron-select', function(){
 					app.$.toast.set('opened', true);
+				});
+
+				app.$.accentColorPicker.addEventListener('value-changed', function(){
+					setTimeout(function(){
+						var lowEnd = document.querySelector('paper-theme').accentPaletteColors[50];
+						if(lowEnd.r === 255 && lowEnd.g === 255 && lowEnd.b === 255){
+							app.$.warning.set('text', 'Poor accent color, too light!')
+							app.$.warning.open();
+						}
+						var highEnd = document.querySelector('paper-theme').accentPaletteColors[900];
+						if(highEnd.r === 0 && highEnd.g === 0 && highEnd.b === 0){
+							app.$.warning.set('text', 'Poor accent color, too dark!')
+							app.$.warning.open();
+						}
+					}, 0);
 				});
 			},0);
 		</script>

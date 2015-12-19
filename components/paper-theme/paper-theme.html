@@ -3,22 +3,13 @@
 <link rel="import" href="./palette.html">
 
 <!--
+Check the README file.
 
-@demo demo/index.html
-@hero hero.svg
+@demo demo/dark.html
+@demo demo/custom-theme.html
 -->
 
 <dom-module id="paper-theme">
-	<template>
-
-		<style>
-		:root{
-
-		}
-		</style>
-
-	</template>
-
 	<script>
 		Polymer({
 			is: 'paper-theme',
@@ -61,10 +52,69 @@
 				'setTheme(primaryPalette, accentPalette, theme, primaryLightShade, primaryShade, primaryDarkShade, accentShade)'
 			],
 
+			setTheme: function(primaryPaletteName, accentPaletteName, theme, primaryLightShade, primaryShade, primaryDarkShade, accentShade){
+
+				if(primaryPaletteName.length == 0 || accentPaletteName.length == 0){
+					return false;
+				}
+
+				this.primaryPaletteColors = this._getPalette(primaryPaletteName);
+				this.accentPaletteColors = this._getPalette(accentPaletteName);
+				if(typeof this.primaryPaletteColors == 'undefined' || typeof this.accentPaletteColors == 'undefined'){
+					return false;
+				}
+
+				this._setColor('primary-color', this.primaryPaletteColors[primaryShade]);
+				this._setColor('primary-color-light', this.primaryPaletteColors[primaryLightShade]);
+				this._setColor('primary-color-dark', this.primaryPaletteColors[primaryDarkShade]);
+				this._setColor('accent-color', this.accentPaletteColors[accentShade]);
+
+				Object.keys(this.primaryPaletteColors).forEach((shade) => {
+					this._setColor('primary-color-'+shade, this.primaryPaletteColors[shade]);
+				});
+
+				Object.keys(this.accentPaletteColors).forEach((shade) => {
+					this._setColor('accent-color-'+shade, this.accentPaletteColors[shade]);
+				});
+
+				if(theme.toLowerCase() === 'light'){
+					this._setColor('status-bar-color', {r: 224, g: 224, b: 224});
+					this._setColor('app-bar-color', {r: 245, g: 245, b: 245});
+					this._setColor('background-color', {r: 250, g: 250, b: 250});
+					this._setColor('card-dialog-color', {r: 255, g: 255, b: 255});
+					this._setColor('inverse-card-dialog-color', {r: 66, g: 66, b: 66});
+				}else{
+					this._setColor('status-bar-color', {r: 0, g: 0, b: 0});
+					this._setColor('app-bar-color', {r: 33, g: 33, b: 33});
+					this._setColor('background-color', {r: 48, g: 48, b: 48});
+					this._setColor('card-dialog-color', {r: 66, g: 66, b: 66});
+					this._setColor('inverse-card-dialog-color', {r: 255, g: 255, b: 255});
+				}
+
+				this._setDeprecatedTheme();
+
+				this.apply();
+			},
+
+			_setDeprecatedTheme: function(){
+				Polymer.StyleDefaults.customStyle['--primary-background-color'] = Polymer.StyleDefaults.customStyle['--background-color'];
+				Polymer.StyleDefaults.customStyle['--primary-text-color'] = Polymer.StyleDefaults.customStyle['--text-on-background-color'];
+				Polymer.StyleDefaults.customStyle['--text-primary-color'] = Polymer.StyleDefaults.customStyle['--text-on-primary-color'];
+				Polymer.StyleDefaults.customStyle['--disabled-text-color'] = Polymer.StyleDefaults.customStyle['--disabled-on-background-color'];
+				Polymer.StyleDefaults.customStyle['--default-primary-color'] = Polymer.StyleDefaults.customStyle['--primary-color'];
+			},
+
+			apply: function(){
+				Polymer.updateStyles();
+			},
+
 			_getPalette: function(name){
+
 				if(name.substr(0,1) === '#'){
+
 					var rgb = this._hexToRgb(name);
 					var hsl = this._rgb2hsl(rgb.r, rgb.g, rgb.b);
+
 					var minMax = function(val, max) {
 						max = max || 1;
 						return Math.min(max, Math.max(0, val));
@@ -90,6 +140,7 @@
 					};
 
 				}else{
+
 					var palette;
 					if(typeof this.customPalettes !== 'undefined'){
 						palette = this.customPalettes.filter((palette) => palette.name.toLowerCase() === name.toLowerCase())[0];
@@ -103,11 +154,13 @@
 					}else{
 						palette = palette.palette;
 					}
-					Object.keys(palette).forEach((shade) => {
-						palette[shade] = this._hexToRgb(palette[shade]);
-					});
 
-					return palette;
+					var rgbObjectPalette = {};
+					Object.keys(palette).forEach((shade) => {
+						rgbObjectPalette[shade] = this._hexToRgb(palette[shade]);
+				});
+
+					return rgbObjectPalette;
 
 				}
 
@@ -142,6 +195,7 @@
 				};
 
 				Polymer.StyleDefaults.customStyle['--'+cssVariable] = toCSS(rgbObject);
+
 				var baseColor = blackOrWhiteText(rgbObject);
 				if(baseColor.r === 0){
 					Polymer.StyleDefaults.customStyle['--text-on-'+cssVariable] = toCSS(baseColor,.87);
@@ -149,102 +203,18 @@
 					Polymer.StyleDefaults.customStyle['--disabled-on-'+cssVariable] = toCSS(baseColor, .38);
 					Polymer.StyleDefaults.customStyle['--divider-on-'+cssVariable] = toCSS(baseColor, .12);
 					Polymer.StyleDefaults.customStyle['--text-30-on-'+cssVariable] = toCSS(baseColor, .30);
+					Polymer.StyleDefaults.customStyle['--text-7-on-'+cssVariable] = toCSS(baseColor, .07);
+					Polymer.StyleDefaults.customStyle['--text-4-on-'+cssVariable] = toCSS(baseColor, .04);
 				}else{
 					Polymer.StyleDefaults.customStyle['--text-on-'+cssVariable] = toCSS(baseColor,1);
 					Polymer.StyleDefaults.customStyle['--secondary-text-on-'+cssVariable] = toCSS(baseColor, .7);
 					Polymer.StyleDefaults.customStyle['--disabled-on-'+cssVariable] = toCSS(baseColor, .3);
 					Polymer.StyleDefaults.customStyle['--divider-on-'+cssVariable] = toCSS(baseColor, .12);
 					Polymer.StyleDefaults.customStyle['--text-30-on-'+cssVariable] = toCSS(baseColor, .26);
-				}
-			},
-			setTheme: function(primaryPaletteName, accentPaletteName, theme, primaryLightShade, primaryShade, primaryDarkShade, accentShade){
-
-				if(primaryPaletteName.length == 0 || accentPaletteName.length == 0){
-					return false;
+					Polymer.StyleDefaults.customStyle['--text-7-on-'+cssVariable] = toCSS(baseColor, .06);
+					Polymer.StyleDefaults.customStyle['--text-4-on-'+cssVariable] = toCSS(baseColor, .035);
 				}
 
-				var primaryPalette = this._getPalette(primaryPaletteName);
-				var accentPalette = this._getPalette(accentPaletteName);
-				if(typeof primaryPalette == 'undefined' || typeof accentPalette == 'undefined'){
-					return false;
-				}
-
-				this._setColor('primary-color', primaryPalette[primaryShade]);
-				this._setColor('primary-color-light', primaryPalette[primaryLightShade]);
-				this._setColor('primary-color-dark', primaryPalette[primaryDarkShade]);
-				this._setColor('accent-color', accentPalette[primaryShade]);
-
-				Object.keys(primaryPalette).forEach((shade) => {
-					this._setColor('primary-color-'+shade, primaryPalette[shade]);
-				});
-
-				Object.keys(accentPalette).forEach((shade) => {
-					this._setColor('accent-color-'+shade, accentPalette[shade]);
-				});
-
-				/*if(baseColorName.toLowerCase() === 'black'){
-					Polymer.StyleDefaults.customStyle['--text-color'] = 'rgba(0,0,0, .87)';
-					Polymer.StyleDefaults.customStyle['--secondary-text-color'] = 'rgba(0,0,0, .54)';
-					Polymer.StyleDefaults.customStyle['--disabled-color'] = 'rgba(0,0,0, .38)';
-					Polymer.StyleDefaults.customStyle['--divider-color'] = 'rgba(0,0,0, .12)';
-
-					Polymer.StyleDefaults.customStyle['--text-color-on-inverse'] = 'rgba(255,255,255, 1)';
-					Polymer.StyleDefaults.customStyle['--secondary-text-color-on-inverse'] = 'rgba(255,255,255, .70)';
-					Polymer.StyleDefaults.customStyle['--disabled-color-on-inverse'] = 'rgba(255,255,255, .30)';
-					Polymer.StyleDefaults.customStyle['--divider-color-on-inverse'] = 'rgba(255,255,255, .12)';
-				}else{
-					Polymer.StyleDefaults.customStyle['--text-color'] = 'rgba(255,255,255, 1)';
-					Polymer.StyleDefaults.customStyle['--secondary-text-color'] = 'rgba(255,255,255, .70)';
-					Polymer.StyleDefaults.customStyle['--disabled-color'] = 'rgba(255,255,255, .30)';
-					Polymer.StyleDefaults.customStyle['--divider-color'] = 'rgba(255,255,255, .12)'
-
-					Polymer.StyleDefaults.customStyle['--text-color-on-inverse'] = 'rgba(0,0,0, .87)';
-					Polymer.StyleDefaults.customStyle['--secondary-text-color-on-inverse'] = 'rgba(0,0,0, .54)';
-					Polymer.StyleDefaults.customStyle['--disabled-color-on-inverse'] = 'rgba(0,0,0, .38)';
-					Polymer.StyleDefaults.customStyle['--divider-color-on-inverse'] = 'rgba(0,0,0, .12)';
-				}
-
-				this._setDeprecatedTheme(primaryPalette, accentPalette, baseColorName);
-				*/
-
-				if(theme.toLowerCase() === 'light'){
-					this._setColor('status-bar-color', {r: 224, g: 224, b: 224});
-					this._setColor('app-bar-color', {r: 245, g: 245, b: 245});
-					this._setColor('background-color', {r: 250, g: 250, b: 250});
-					this._setColor('card-dialog-color', {r: 255, g: 255, b: 255});
-					this._setColor('inverse-card-dialog-color', {r: 66, g: 66, b: 66});
-				}else{
-					this._setColor('status-bar-color', {r: 0, g: 0, b: 0});
-					this._setColor('app-bar-color', {r: 33, g: 33, b: 33});
-					this._setColor('background-color', {r: 48, g: 48, b: 48});
-					this._setColor('card-dialog-color', {r: 66, g: 66, b: 66});
-					this._setColor('inverse-card-dialog-color', {r: 255, g: 255, b: 255});
-				}
-
-				this._setDeprecatedTheme();
-
-				this.apply();
-			},
-
-			_setDeprecatedTheme: function(){
-				Polymer.StyleDefaults.customStyle['--primary-background-color'] = Polymer.StyleDefaults.customStyle['--background-color'];
-				Polymer.StyleDefaults.customStyle['--primary-text-color'] = Polymer.StyleDefaults.customStyle['--text-on-background-color'];
-				Polymer.StyleDefaults.customStyle['--text-primary-color'] = Polymer.StyleDefaults.customStyle['--text-on-primary-color'];
-				Polymer.StyleDefaults.customStyle['--disabled-text-color'] = Polymer.StyleDefaults.customStyle['--disabled-on-background-color'];
-				Polymer.StyleDefaults.customStyle['--default-primary-color'] = Polymer.StyleDefaults.customStyle['--primary-color'];
-				//Polymer.StyleDefaults.customStyle['--divider-color'] = ;
-				/*Polymer.StyleDefaults.customStyle['--primary-text-color'] = Polymer.StyleDefaults.customStyle['--text-color'];
-				Polymer.StyleDefaults.customStyle['--text-primary-color'] = Polymer.StyleDefaults.customStyle['--text-color-on-inverse'];
-				Polymer.StyleDefaults.customStyle['--primary-background-color'] = baseColorName.toLowerCase() === 'black' ? '#fff' : '#000';
-				Polymer.StyleDefaults.customStyle['--disabled-text-color'] = Polymer.StyleDefaults.customStyle['--disabled-color'];
-				Polymer.StyleDefaults.customStyle['--default-primary-color'] = Polymer.StyleDefaults.customStyle['--primary-color'];
-
-				Polymer.StyleDefaults.customStyle['--dark-primary-color'] = Polymer.StyleDefaults.customStyle['--primary-color-dark'];
-				Polymer.StyleDefaults.customStyle['--light-primary-color'] = Polymer.StyleDefaults.customStyle['--primary-color-light'];*/
-			},
-
-			apply: function(){
-				Polymer.updateStyles();
 			},
 
 			_hexToRgb: function(hex){
@@ -279,12 +249,9 @@
 				}
 				return [h, s, l];
 			},
+
 			_hsl2rgb: function(h, s, l) {
 				var r, g, b;
-
-				//h = bound01(h, 360);
-				//s = bound01(s, 100);
-				//l = bound01(l, 100);
 
 				function hue2rgb(p, q, t) {
 					if(t < 0) t += 1;
@@ -308,6 +275,7 @@
 
 				return { r: r * 255, g: g * 255, b: b * 255 };
 			}
+
 		});
 	</script>
 </dom-module>

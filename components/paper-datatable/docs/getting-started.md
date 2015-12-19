@@ -35,6 +35,8 @@ whether you wish to use the full `<paper-datatable-card>` element. The `<paper-d
   - Use the `<paper-datatable>` if your table is going to show a fixed number of rows.
   - Use the `<paper-datatable-card>` if your table has a dynamic number of rows. 
 
+And it's also a cool idea to check [the different `resize-behavior`s](resize-behavior.html) and pick one you like.
+
 Editable columns
 ===
 There are two ways to define editable columns, the easiest way is to just set the `editable` attribute like
@@ -62,3 +64,10 @@ Additionally it's possible to load the `<template>` instead of inline. The will 
  the user taps on the cell. See the first table in [this demo](editable.html) for an example of this. The big advantage
  of this is performance as not every cell needs to be initalized.
 
+Polymer Keys and Selections
+===
+You might encounter keys that look like `#1` whilst working with `<paper-datatable>` these keys are Polymer's internal
+keys on the `paperDatatable.data` collection. You can use those just like they would be a normal index in Polymer
+functions, so stuff like the following works:
+
+	this.$.paperDatatable.set('data.#1.author', 'Tom');
