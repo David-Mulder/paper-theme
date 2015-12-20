@@ -19,13 +19,14 @@ Next it needs to be possible to show text and components on top of these colors.
 | Augment | MD spec | Description |
 | ------- | ------- | ----------- |
 | `text-on-*`, `secondary-text-on-*`, `disabled-on-*`, `divider=on-*` | [Use opacity for text, icons, and dividers](http://www.google.be/design/spec/style/color.html#color-ui-color-application) | Straight from the spec |
-| `text-30-on-*` | [Track Off from Switch](http://www.google.be/design/spec/components/selection-controls.html#selection-controls-switch) | Base color with 30% in dark and 26% in light |
+| `shade-30-on-*` | [Track Off from Switch](http://www.google.be/design/spec/components/selection-controls.html#selection-controls-switch) | Base color with 30% in dark and 26% in light |
+| `shade-7-on-*`, `shade-4-on-*` | [Converted grayscale values to `rgba`](https://www.google.com/design/spec/components/data-tables.html#data-tables-structure) | Base color with 7% and 4% opacity in the light theme |
 
 What do we still miss? It's still not possible this way to take 50% of a certain swatch (as is for example required by switches), and probably a lot more augments might still be necessary.
 
 What about `<paper-theme>`?
 ---
-We're talking about approxamatily 150 css variables and even more if new augments are added. That's far too much to define by hand, so that's where `<paper-theme>` comes in. This element defines all the variables for you and is as easy to use as the following statement:
+We're talking about approximately 150 css variables and even more if new augments are added. That's far too much to define by hand, so that's where `<paper-theme>` comes in. This element defines all the variables for you and is as easy to use as the following statement:
 
     <paper-theme primary-palette="Indigo" accent-palette="Pink"></paper-theme>
     
@@ -37,7 +38,11 @@ And lastly (as far as important features go) you can set the theme
 
     <paper-theme primary-palette="Indigo" accent-palette="Pink" theme="Dark"></paper-theme>
 
-Additionally there is a `standard-styles.html` import that will set the styles of a number of elements to use the new variables.
+Additionally there is a `standard-styles.html` import that will set the styles of most paper elements to use the new variables.
+
+Exporting `<paper-theme>` generated variables
+---
+All `<paper-theme>` does is generate a set of CSS variables based on certain inputs on the fly. If someone is so inclined it would be incredibly easy to export this set of variables and place it in a static `css`/`html` file. The advantage of this is performance, the disadvantage of this is that if `<paper-theme>` changes you will manually need to add and/or change those files (as is currently the case).
 
 Want to see it in action?
 ---
