@@ -44,6 +44,10 @@ Exporting `<paper-theme>` generated variables
 ---
 All `<paper-theme>` does is generate a set of CSS variables based on certain inputs on the fly. If someone is so inclined it would be incredibly easy to export this set of variables and place it in a static `css`/`html` file. The advantage of this is performance, the disadvantage of this is that if `<paper-theme>` changes you will manually need to add and/or change those files (as is currently the case).
 
+Performance
+---
+Rendering text with an opacity per the MD spec comes with a performance hit. This performance hit is definitely acceptable in the large majority of cases, but not always. An advantage of using an element to generate the variables is that switching to opaque colours can be done extremely easily if desired and can be even done in response to the environment (e.g. mobile devices vs desktop). Whether the performance hit is actually significant enough to warrant this is open to discussion though, however the `paper-styles` maintainers seem to believe so I wanted to address it here. 
+
 Want to see it in action?
 ---
 Well, check [this demo](http://david-mulder.github.io/paper-theme/components/paper-theme/demo/dark.html) here and explore the generated palettes [here](http://david-mulder.github.io/paper-theme/components/paper-theme/demo/custom-theme.html)
